@@ -20,7 +20,7 @@ console.log(dbConfig);
 // DATABASE CONNECTION
 const database = new db(dbConfig);
 
-const result = database.query("SELECT * FROM products");
+const result = database.query("SELECT * FROM products WHERE id=2");
 console.log(result);
 
 // middleware

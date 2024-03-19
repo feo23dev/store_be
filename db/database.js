@@ -16,9 +16,9 @@ class Database {
     }
   }
 
-  async query(sql, values) {
+  async query(sql, values = []) {
     try {
-      const result = await this.pool.query(sql, (values = []));
+      const result = await this.pool.query(sql, values);
       console.log("RESULT QUERY", result.rows);
       return result;
     } catch (error) {
