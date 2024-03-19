@@ -2,29 +2,21 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+app.use(express.json());
 
-const ProductModel = require("./models/ProductModel");
-
-const productModel = new ProductModel();
+const productRoute = require("./routers/productRoute");
 
 // middleware
-app.use(express.json());
+
 const port = process.env.PORT;
 
-app.get("/", (req, res) => {
+//
+
+app.get("/api/v1", (req, res) => {
   res.send("<h1>Store API</h1>");
 });
 
-app.get("/products", async (req, res) => {
-  try {
-    const products = await productModel.getAllProducts();
-    console.log("PRODUCTS", products);
-    res.json(products);
-  } catch (error) {
-    console.log("ERROR");
-    res.status(500).send("Error fetching the products");
-  }
-});
+app.use("/api/v1/products", productRoute);
 
 const start = async () => {
   try {
