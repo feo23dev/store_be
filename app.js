@@ -8,12 +8,14 @@ const errorMiddleware = require("./middleware/error-handler");
 const notFoundMiddleware = require("./middleware/not-found");
 
 const dbConfig = {
-  user: "postgres",
-  host: "localhost",
-  database: "storedb",
-  password: "testpass",
-  port: "5432",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 };
+
+console.log(dbConfig);
 
 // DATABASE CONNECTION
 const database = new db(dbConfig);

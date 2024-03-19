@@ -8,8 +8,8 @@ class Database {
   async connect() {
     try {
       const client = await this.pool.connect();
+      console.log("SUCCESFULY CONNECTED TO THE DATABASE");
       return client;
-      console.log("Succesfuly connected to the database", client);
     } catch (error) {
       console.log("There was a problem connecting to the database");
       console.log(error);
@@ -19,7 +19,8 @@ class Database {
   async query(sql, values) {
     try {
       const result = await this.pool.query(sql, (values = []));
-      console.log(result.rows[0].description);
+      console.log("RESULT QUERY", result.rows);
+      return result;
     } catch (error) {
       console.log("ERROR GETTING INFORMATION FROM THE DATABASE");
       console.log(error);
