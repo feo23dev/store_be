@@ -6,4 +6,6 @@ const dbConfig = {
   port: process.env.DB_PORT,
 };
 
+console.log("I AM FROM CONFIG.JS", dbConfig);
+
 module.exports = dbConfig;
