@@ -4,6 +4,7 @@ class ProductController {
   constructor() {
     this.productModel = new ProductModel();
     this.getAllProducts = this.getAllProducts.bind(this);
+    this.getProductById = this.getProductById.bind(this);
   }
 
   async getAllProducts(req, res) {
@@ -13,6 +14,18 @@ class ProductController {
       res.json(products);
     } catch (error) {
       console.log("Error fetching..controller", error);
+      res.status(500).send(error);
+    }
+  }
+
+  async getProductById(req, res) {
+    const id = req.params.id;
+    try {
+      const product = await this.productModel.getProductById(Number(id));
+      console.log("Product By ID is", product);
+      res.json(product);
+    } catch (error) {
+      console.log("Error fetching single product", error);
       res.status(500).send(error);
     }
   }
