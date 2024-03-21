@@ -17,9 +17,13 @@ const port = process.env.PORT;
 
 app.use("/api/v1/products", productRoute);
 
-app.get("/api/v1", (req, res) => {
-  res.send("<h1>Welcome To The Q-Store</h1>");
+app.all("*", (req, res, next) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Can't find ${req.originalUrl}`,
+  });
 });
+
 const start = async () => {
   try {
     app.listen(port, (req, res) => {
@@ -30,7 +34,3 @@ const start = async () => {
   }
 };
 start();
-
-// setTimeout(() => {
-//   populateDatabase(data);
-// }, 5000);

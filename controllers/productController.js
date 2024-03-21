@@ -10,10 +10,9 @@ class ProductController {
   async getAllProducts(req, res) {
     try {
       const products = await this.productModel.getAllProducts();
-      console.log("Products are here", products);
-      res.json(products);
+
+      res.status(200).json({ status: "success", data: products });
     } catch (error) {
-      console.log("Error fetching..controller", error);
       res.status(500).send(error);
     }
   }
@@ -22,10 +21,9 @@ class ProductController {
     const id = req.params.id;
     try {
       const product = await this.productModel.getProductById(id);
-      console.log("Product By ID is", product);
-      res.json(product);
+
+      res.status(200).json({ status: "success", data: product });
     } catch (error) {
-      console.log("Error fetching single product", error);
       res.status(500).send(error);
     }
   }
