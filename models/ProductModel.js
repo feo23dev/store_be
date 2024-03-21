@@ -4,7 +4,7 @@ const database = new db(configFile);
 class ProductModel {
   constructor() {}
 
-  async getAllProducts() {
+  getAllProducts = async () => {
     try {
       const query = {
         name: "fetch-products",
@@ -13,11 +13,11 @@ class ProductModel {
       const { rows } = await database.pool.query(query);
       return rows;
     } catch (error) {
-      throw new Error("Error fetching products from the database");
+      throw new Error(`Error fetching products ${error.message}`);
     }
-  }
+  };
 
-  async getProductById(id) {
+  getProductById = async (id) => {
     try {
       const query = {
         name: "fetch-product-by-id",
@@ -27,9 +27,9 @@ class ProductModel {
       const { rows } = await database.pool.query(query);
       return rows;
     } catch (error) {
-      throw new Error(`Error fetching product with ID ${id}`);
+      throw new Error(`Error fetching product with ID ${error.message}`);
     }
-  }
+  };
 }
 
 module.exports = ProductModel;
