@@ -2,6 +2,9 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+// const data = require("../products");
+// const dumper = require("./db/dump");
+// const populateDatabase = require("./db/dump");
 app.use(express.json());
 
 const productRoute = require("./routes/productRoute");
@@ -12,12 +15,11 @@ const port = process.env.PORT;
 
 //
 
-app.get("/api/v1", (req, res) => {
-  res.send("<h1>Store API</h1>");
-});
-
 app.use("/api/v1/products", productRoute);
 
+app.get("/api/v1", (req, res) => {
+  res.send("<h1>Welcome To The Q-Store</h1>");
+});
 const start = async () => {
   try {
     app.listen(port, (req, res) => {
@@ -28,3 +30,7 @@ const start = async () => {
   }
 };
 start();
+
+// setTimeout(() => {
+//   populateDatabase(data);
+// }, 5000);

@@ -21,7 +21,7 @@ class ProductController {
   async getProductById(req, res) {
     const id = req.params.id;
     try {
-      const product = await this.productModel.getProductById(Number(id));
+      const product = await this.productModel.getProductById(id);
       console.log("Product By ID is", product);
       res.json(product);
     } catch (error) {
