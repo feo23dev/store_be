@@ -2,7 +2,6 @@ const db = require("../db/database");
 const configFile = require("../db/config");
 const database = new db(configFile);
 
-const AppError = require("../utils/appError");
 class UserModel {
   createUser = async (userData) => {
     console.log("CREATE USER RUN1");
@@ -18,7 +17,7 @@ class UserModel {
         "INSERT INTO users(email,password,first_name,last_name) VALUES($1,$2,$3,$4) RETURNING *";
 
       const user = await database.pool.query(text, values);
-      console.log("SUCCESFULY CREATED A NEW USER", user.rows);
+
       return user.rows[0];
     } catch (error) {
       throw new Error(error);
