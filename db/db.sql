@@ -69,3 +69,14 @@ INSERT INTO products (name,price,image,description,company_id,category_id,stok) 
 ('wooden desk',150999,'https://www.course-api.com/images/store/product-20.jpeg','Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat',1,1,34),
 ('wooden desk',40099,'https://www.course-api.com/images/store/product-21.jpeg','Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat',1,1,5),
 ('wooden table',234999,'https://www.course-api.com/images/store/product-22.jpeg','Cloud bread VHS hell of banjo bicycle rights jianbing umami mumblecore etsy 8-bit pok pok +1 wolf. Vexillologist yr dreamcatcher waistcoat',4,3,9)
+
+
+
+CREATE TABLE users(
+	id SERIAL PRIMARY KEY,
+	email VARCHAR(255) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	first_name VARCHAR(100),
+	last_name VARCHAR(100),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+)

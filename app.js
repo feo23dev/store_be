@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 
 const productRoute = require("./routes/productRoute");
+const userRoute = require("./routes/userRoute");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -13,6 +14,7 @@ const port = process.env.PORT;
 
 // routes
 app.use("/api/v1/products", productRoute);
+app.use("/api/v1/users", userRoute);
 
 //uncaught routes
 app.all("*", (req, res, next) => {
