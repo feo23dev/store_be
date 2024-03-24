@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
-const { password } = require("../db/config");
+const { password, database } = require("../db/config");
 
 class AuthController {
   constructor() {
@@ -47,6 +47,52 @@ class AuthController {
       }
     } catch (error) {
       next(new AppError(error.message, error.statusCode));
+    }
+  };
+
+  login = async (req, res) => {
+    //check if the user with the email exists
+    const { email } = req.body;
+    const loginPassword = req.body.password;
+    if (!loginPassword || !email) {
+      return res
+        .status(400)
+        .json({ data: "error", message: "Provide required credentials" });
+    }
+
+    try {
+      const existingUser = await this.userModel.getUserByEmail(email);
+
+      if (existingUser) {
+        console.log("User exist with this email", existingUser);
+        const hashedPasswordInDatabase = existingUser.password;
+        bcrypt.compare(
+          loginPassword,
+          hashedPasswordInDatabase,
+          (err, result) => {
+            if (err) {
+              console.log("ERROR COMPARING PASSWORDS");
+            } else {
+              if (result) {
+                res
+                  .status(200)
+                  .json({ data: "success", message: "Correct credentials" });
+              } else {
+                res
+                  .status(400)
+                  .json({ data: "fail", message: "WRONG PASSWORD" });
+              }
+            }
+          }
+        );
+      } else {
+        res.status(400).json({
+          data: "fail",
+          message: "User Does not exist,Sign Up to continue",
+        });
+      }
+    } catch (error) {
+      res.send(error);
     }
   };
 }

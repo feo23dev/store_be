@@ -9,5 +9,6 @@ const userController = new UserController();
 router.get("/", userController.getAllUsers);
 
 router.post("/signup", authController.signUp);
+router.post("/login", authController.login);
 
 module.exports = router;
