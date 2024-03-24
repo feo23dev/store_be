@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
-const { password, database } = require("../db/config");
+const jwt = require("jsonwebtoken");
 
 class AuthController {
   constructor() {
@@ -26,8 +26,6 @@ class AuthController {
       const existingUser = await this.userModel.getUserByEmail(userData.email);
 
       if (existingUser) {
-        const storedPassword = existingUser.password;
-
         return res.send("Email already exists.Try logging in");
       } else {
         // hash the password here just before we send it to db to create a user
@@ -35,12 +33,24 @@ class AuthController {
           if (err) {
             console.log("Error while hashing", err);
           }
+
+          //Created new user
           const newUser = await this.userModel.createUser({
             ...userData,
             password: hash,
           });
+
+          // SIGN A JWT
+
+          const token = this.signJWT(
+            { id: newUser.id },
+            process.env.JWT_SECRET,
+            process.env.JWT_EXPIRES_IN
+          );
+
           res.status(201).json({
             status: "success",
+            token: token,
             data: `User created with ${newUser.email}`,
           });
         });
@@ -54,6 +64,7 @@ class AuthController {
     //check if the user with the email exists
     const { email } = req.body;
     const loginPassword = req.body.password;
+
     if (!loginPassword || !email) {
       return res
         .status(400)
@@ -74,13 +85,23 @@ class AuthController {
               console.log("ERROR COMPARING PASSWORDS");
             } else {
               if (result) {
-                res
-                  .status(200)
-                  .json({ data: "success", message: "Correct credentials" });
+                // SIGN A JWT
+                const token = this.signJWT(
+                  { id: existingUser.id },
+                  process.env.JWT_SECRET,
+                  process.env.JWT_EXPIRES_IN
+                );
+
+                res.status(200).json({
+                  data: "success",
+                  token: token,
+                  message: "Correct credentials",
+                });
               } else {
-                res
-                  .status(400)
-                  .json({ data: "fail", message: "WRONG PASSWORD" });
+                res.status(400).json({
+                  data: "fail",
+                  message: "Incorrect Password",
+                });
               }
             }
           }
@@ -94,6 +115,11 @@ class AuthController {
     } catch (error) {
       res.send(error);
     }
+  };
+
+  signJWT = (payload, secret, expiration) => {
+    const token = jwt.sign(payload, secret, expiration);
+    return token;
   };
 }
 
