@@ -1,10 +1,12 @@
-const { user } = require("../db/config");
+const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
+const { password } = require("../db/config");
 
 class AuthController {
   constructor() {
     this.userModel = new UserModel();
+    this.saltRound = 12;
   }
 
   signUp = async (req, res, next) => {
@@ -24,10 +26,24 @@ class AuthController {
       const existingUser = await this.userModel.getUserByEmail(userData.email);
 
       if (existingUser) {
+        const storedPassword = existingUser.password;
+
         return res.send("Email already exists.Try logging in");
       } else {
-        const newUser = await this.userModel.createUser(userData);
-        res.status(201).json({ status: "success", data: { user: newUser } });
+        // hash the password here just before we send it to db to create a user
+        bcrypt.hash(userData.password, this.saltRound, async (err, hash) => {
+          if (err) {
+            console.log("Error while hashing", err);
+          }
+          const newUser = await this.userModel.createUser({
+            ...userData,
+            password: hash,
+          });
+          res.status(201).json({
+            status: "success",
+            data: `User created with ${newUser.email}`,
+          });
+        });
       }
     } catch (error) {
       next(new AppError(error.message, error.statusCode));
