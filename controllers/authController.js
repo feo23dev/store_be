@@ -1,3 +1,4 @@
+const { promisify } = require("util");
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
@@ -120,6 +121,43 @@ class AuthController {
   signJWT = (payload, secret, expiration) => {
     const token = jwt.sign(payload, secret, expiration);
     return token;
+  };
+
+  protect = async (req, res, next) => {
+    // 1- Get the token
+    req.requestTime = new Date().toISOString();
+    console.log(req.headers);
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+    console.log("TOKEN IS", token);
+    if (!token) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "You are not logged in!" });
+    }
+
+    // 2-Verification of token
+    try {
+      const decodedJWT = await promisify(jwt.verify)(
+        token,
+        process.env.JWT_SECRET
+      );
+      console.log(decodedJWT);
+    } catch (error) {
+      return res.status(400).json({ message: error });
+    }
+
+    // 3-Check if user still exists
+    const user = this.userModel.getUserByEmail();
+
+    // 4-Check if user changed password after the JWT was issued
+
+    next();
   };
 }
 
