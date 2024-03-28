@@ -9,7 +9,7 @@ const AuthController = require("../controllers/authController");
 const authController = new AuthController();
 
 // Define product routes
-router.get("/", authController.protect, productController.getAllProducts);
+router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductById);
 
 // Add more routes as needed

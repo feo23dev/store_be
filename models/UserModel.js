@@ -4,14 +4,13 @@ const database = new db(configFile);
 
 class UserModel {
   createUser = async (userData) => {
-    console.log("CREATE USER RUN1");
     const values = [
       userData.email,
       userData.password,
       userData.first_name,
       userData.last_name,
     ];
-    console.log("values in userModel", values);
+
     try {
       const text =
         "INSERT INTO users(email,password,first_name,last_name) VALUES($1,$2,$3,$4) RETURNING *";

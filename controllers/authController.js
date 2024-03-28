@@ -4,6 +4,9 @@ const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
 
+const User = require("../models/User");
+const { user } = require("../db/config");
+
 class AuthController {
   constructor() {
     this.userModel = new UserModel();
@@ -11,12 +14,14 @@ class AuthController {
   }
 
   signUp = async (req, res, next) => {
+    console.log("BODY", req.body);
     let userData = {
       email: req.body.email,
       password: req.body.password,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
     };
+    console.log("USER POST REQUEST DATA", userData);
     if (!userData.email || !userData.password) {
       return res
         .status(400)
@@ -27,7 +32,11 @@ class AuthController {
       const existingUser = await this.userModel.getUserByEmail(userData.email);
 
       if (existingUser) {
-        return res.send("Email already exists.Try logging in");
+        console.log("USER ALREADY EXITS");
+        return res.status(400).json({
+          status: "fail",
+          message: "User already exists please login",
+        });
       } else {
         // hash the password here just before we send it to db to create a user
         bcrypt.hash(userData.password, this.saltRound, async (err, hash) => {
@@ -36,13 +45,21 @@ class AuthController {
           }
 
           //Created new user
+
           const newUser = await this.userModel.createUser({
             ...userData,
             password: hash,
           });
+          // const user = new User(
+          //   userData.email,
+          //   userData.password,
+          //   userData.first_name,
+          //   userData.last_name
+          // );
+
+          console.log("OUR USER", user);
 
           // SIGN A JWT
-
           const token = this.signJWT(
             { id: newUser.id },
             process.env.JWT_SECRET,
@@ -153,7 +170,8 @@ class AuthController {
     }
 
     // 3-Check if user still exists
-    const user = this.userModel.getUserByEmail();
+    // const user = this.userModel.getUserByEmail();
+    console.log("Email is");
 
     // 4-Check if user changed password after the JWT was issued
 
