@@ -14,6 +14,10 @@ class UserController {
       next(new AppError("Could not get users", error.statusCode));
     }
   };
+
+  getAdminPage = (req, res) => {
+    res.send("<h1>ADMIN PAGE</h1>");
+  };
 }
 
 module.exports = UserController;

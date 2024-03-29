@@ -3,11 +3,12 @@ const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
-
-const User = require("../models/User");
 const { user } = require("../db/config");
+const User = require("../models/User");
+const { type } = require("os");
 
 class AuthController {
+  controllers = [];
   constructor() {
     this.userModel = new UserModel();
     this.saltRound = 12;
@@ -159,19 +160,24 @@ class AuthController {
     }
 
     // 2-Verification of token
+    let decodedJWT;
     try {
-      const decodedJWT = await promisify(jwt.verify)(
-        token,
-        process.env.JWT_SECRET
-      );
-      console.log(decodedJWT);
+      decodedJWT = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     } catch (error) {
       return res.status(400).json({ message: error });
     }
 
     // 3-Check if user still exists
-    // const user = this.userModel.getUserByEmail();
-    console.log("Email is");
+    // Maybe, user deleted his account but JWT still looks valid
+
+    const userStillExists = await this.userModel.getUserById(decodedJWT.id);
+
+    if (!userStillExists) {
+      return res.status(401).json({
+        status: "fail",
+        message: "User belonging to the token does not exists anymore",
+      });
+    }
 
     // 4-Check if user changed password after the JWT was issued
 

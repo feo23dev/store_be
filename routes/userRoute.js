@@ -10,6 +10,6 @@ router.get("/", userController.getAllUsers);
 
 router.post("/signup", authController.signUp);
 router.post("/login", authController.login);
-router.post("/admin");
+router.post("/admin", authController.protect, userController.getAdminPage);
 
 module.exports = router;

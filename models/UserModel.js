@@ -35,6 +35,17 @@ class UserModel {
     }
   };
 
+  getUserById = async (userId) => {
+    try {
+      const text = "SELECT * FROM users WHERE id=$1";
+      const values = [userId];
+      const user = await database.pool.query(text, values);
+      return user.rows[0];
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   getAllUsers = async () => {
     try {
       const text = "SELECT * FROM users";
