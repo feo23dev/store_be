@@ -112,13 +112,13 @@ class AuthController {
                 );
 
                 res.status(200).json({
-                  data: "success",
+                  status: "success",
                   token: token,
                   message: "Correct credentials",
                 });
               } else {
                 res.status(400).json({
-                  data: "fail",
+                  status: "fail",
                   message: "Incorrect Password",
                 });
               }
