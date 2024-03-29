@@ -200,6 +200,7 @@ class AuthController {
     }
 
     // Grant access to the protected route
+    req.user = userStillExists;
     next();
   };
 }
