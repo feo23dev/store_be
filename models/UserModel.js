@@ -55,6 +55,17 @@ class UserModel {
       throw new Error(error);
     }
   };
+
+  didChangedPassword = async (email) => {
+    try {
+      const text = "SELECT * FROM password_change_history  WHERE email=$1";
+      const values = [email];
+      const user = await database.pool.query(text, values);
+      return user.rows[0];
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
 module.exports = UserModel;

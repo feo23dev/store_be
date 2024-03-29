@@ -171,6 +171,7 @@ class AuthController {
     // Maybe, user deleted his account but JWT still looks valid
 
     const userStillExists = await this.userModel.getUserById(decodedJWT.id);
+    console.log("USER EXISTS HERE", userStillExists);
 
     if (!userStillExists) {
       return res.status(401).json({
@@ -180,7 +181,25 @@ class AuthController {
     }
 
     // 4-Check if user changed password after the JWT was issued
+    const didChangePassword = await this.userModel.didChangedPassword(
+      userStillExists.email
+    );
+    if (didChangePassword) {
+      const JWTimeStamp = decodedJWT.iat;
+      const passwordChangedAt = didChangePassword.changed_at.getTime() / 1000;
+      console.log(JWTimeStamp);
+      console.log(passwordChangedAt);
 
+      if (JWTimeStamp < passwordChangedAt) {
+        console.log("PASSWORD CHANGED AFTER JWT WAS ISSUED");
+        return res.status(401).json({
+          message: "fail",
+          message: "User recently changed password! Please login again!",
+        });
+      } // 100 < 200 // true;
+    }
+
+    // Grant access to the protected route
     next();
   };
 }

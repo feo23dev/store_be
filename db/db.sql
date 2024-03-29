@@ -80,3 +80,30 @@ CREATE TABLE users(
 	last_name VARCHAR(100),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 )
+
+CREATE TABLE password_change_history (
+    user_id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (email) REFERENCES users(email)
+);
+
+
+CREATE OR REPLACE FUNCTION log_password_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO password_change_history (email) VALUES (NEW.email);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE TRIGGER password_changed_trigger
+AFTER UPDATE OF password ON users
+FOR EACH ROW
+WHEN (OLD.password IS DISTINCT FROM NEW.password)
+EXECUTE FUNCTION log_password_change();
+
+
+
