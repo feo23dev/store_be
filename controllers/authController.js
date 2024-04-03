@@ -115,6 +115,13 @@ class AuthController {
                   status: "success",
                   token: token,
                   message: "Correct credentials",
+                  data: {
+                    id: existingUser.id,
+                    first_name: existingUser.first_name,
+                    last_name: existingUser.last_name,
+                    email: existingUser.email,
+                    created_at: existingUser.created_at,
+                  },
                 });
               } else {
                 res.status(400).json({
