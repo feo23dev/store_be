@@ -1,3 +1,10 @@
+drop table if EXISTS category;
+drop table if EXISTS company;
+drop table if EXISTS products;
+drop table if EXISTS users;
+drop table if EXISTS password_change_history;
+
+
 CREATE TABLE category(
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL
