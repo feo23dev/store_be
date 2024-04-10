@@ -21,6 +21,7 @@ class AuthController {
       password: req.body.password,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
+      role_id: req.body.role_id,
     };
     console.log("USER POST REQUEST DATA", userData);
     if (!userData.email || !userData.password) {
@@ -151,7 +152,7 @@ class AuthController {
   protect = async (req, res, next) => {
     // 1- Get the token
     req.requestTime = new Date().toISOString();
-    console.log(req.headers);
+    console.log("REQ HEADERS", req.headers);
     let token;
     if (
       req.headers.authorization &&
@@ -171,14 +172,15 @@ class AuthController {
     try {
       decodedJWT = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     } catch (error) {
-      return res.status(400).json({ message: error });
+      return res
+        .status(401)
+        .json({ status: "fail", message: "You are not Authorized!" });
     }
 
     // 3-Check if user still exists
     // Maybe, user deleted his account but JWT still looks valid
 
     const userStillExists = await this.userModel.getUserById(decodedJWT.id);
-    console.log("USER EXISTS HERE", userStillExists);
 
     if (!userStillExists) {
       return res.status(401).json({
@@ -194,8 +196,6 @@ class AuthController {
     if (didChangePassword) {
       const JWTimeStamp = decodedJWT.iat;
       const passwordChangedAt = didChangePassword.changed_at.getTime() / 1000;
-      console.log(JWTimeStamp);
-      console.log(passwordChangedAt);
 
       if (JWTimeStamp < passwordChangedAt) {
         console.log("PASSWORD CHANGED AFTER JWT WAS ISSUED");
@@ -208,7 +208,20 @@ class AuthController {
 
     // Grant access to the protected route
     req.user = userStillExists;
+
     next();
+  };
+
+  restrictTo = (req, res, next) => {
+    console.log("Restrict", req.user);
+    if (req.user.role_id !== 2) {
+      return res.status(403).json({
+        status: "fail",
+        message: "You are not authorized to access this route",
+      });
+    } else {
+      return next();
+    }
   };
 }
 

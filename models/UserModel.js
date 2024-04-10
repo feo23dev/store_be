@@ -9,11 +9,12 @@ class UserModel {
       userData.password,
       userData.first_name,
       userData.last_name,
+      userData.role_id,
     ];
 
     try {
       const text =
-        "INSERT INTO users(email,password,first_name,last_name) VALUES($1,$2,$3,$4) RETURNING *";
+        "INSERT INTO users(email,password,first_name,last_name,role_id) VALUES($1,$2,$3,$4,$5) RETURNING *";
 
       const user = await database.pool.query(text, values);
 

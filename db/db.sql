@@ -88,6 +88,13 @@ CREATE TABLE users(
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 )
 
+CREATE TABLE roles(
+id SERIAL PRIMARY KEY,
+role VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO roles (role) VALUES('user'),('admin');
+
 CREATE TABLE password_change_history (
     user_id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
