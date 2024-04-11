@@ -18,7 +18,7 @@ class UserController {
   getAdminPage = (req, res) => {
     console.log("From admin page", req.user);
     console.log("this is request.user", req.user);
-    res.send("Welcome to admin page");
+    res.json({ status: "success", data: "Admin page" });
   };
 }
 
