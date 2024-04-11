@@ -4,8 +4,6 @@ const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
 const { user } = require("../db/config");
-const User = require("../models/User");
-const { type } = require("os");
 
 class AuthController {
   controllers = [];
@@ -122,6 +120,7 @@ class AuthController {
                     last_name: existingUser.last_name,
                     email: existingUser.email,
                     created_at: existingUser.created_at,
+                    role: existingUser.role_id,
                   },
                 });
               } else {
@@ -152,7 +151,7 @@ class AuthController {
   protect = async (req, res, next) => {
     // 1- Get the token
     req.requestTime = new Date().toISOString();
-    console.log("REQ HEADERS", req.headers);
+    console.log("PROTECT MIDDLEWARE");
     let token;
     if (
       req.headers.authorization &&
@@ -168,6 +167,7 @@ class AuthController {
     }
 
     // 2-Verification of token
+    console.log("DECODING TOKEN");
     let decodedJWT;
     try {
       decodedJWT = await promisify(jwt.verify)(token, process.env.JWT_SECRET);

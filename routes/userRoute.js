@@ -10,7 +10,14 @@ router.get("/", userController.getAllUsers);
 
 router.post("/signup", authController.signUp);
 router.post("/login", authController.login);
-router.post(
+// router.post(
+//   "/admin",
+//   authController.protect,
+//   authController.restrictTo,
+//   userController.getAdminPage
+// );
+
+router.get(
   "/admin",
   authController.protect,
   authController.restrictTo,
