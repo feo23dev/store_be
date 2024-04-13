@@ -30,6 +30,28 @@ class ProductModel {
       throw new Error(`Error fetching product with ID ${error.message}`);
     }
   };
+
+  createNewProduct = async (productData) => {
+    try {
+      const query = {
+        name: "create-product",
+        text: "INSERT INTO products (name, price, image, description, company_id, category_id, stok) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        values: [
+          productData.name,
+          productData.price,
+          productData.image,
+          productData.description,
+          productData.company_id,
+          productData.category_id,
+          productData.stok,
+        ],
+      };
+      const { rows } = await database.pool.query(query);
+      return rows[0];
+    } catch (error) {
+      throw new Error(`Error creating new product ${error.message}`);
+    }
+  };
 }
 
 module.exports = ProductModel;

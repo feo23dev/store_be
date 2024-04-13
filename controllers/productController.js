@@ -34,6 +34,17 @@ class ProductController {
       });
     }
   };
+
+  createNewProduct = async (req, res) => {
+    console.log(req.body);
+    const productData = req.body;
+    try {
+      const response = await this.productModel.createNewProduct(productData);
+      res.status(201).json({ status: "success", data: response });
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  };
 }
 
 module.exports = ProductController;

@@ -11,6 +11,12 @@ const authController = new AuthController();
 // Define product routes
 router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductById);
+router.post(
+  "/create",
+  authController.protect,
+  authController.restrictTo,
+  productController.createNewProduct
+);
 
 // Add more routes as needed
 
