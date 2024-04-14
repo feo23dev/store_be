@@ -1,5 +1,6 @@
 const ProductModel = require("../models/ProductModel");
-const AppError = require("../utils/appError");
+const multer = require("multer");
+const upload = multer({ dest: "public/img/products" });
 
 class ProductController {
   constructor() {
@@ -36,15 +37,20 @@ class ProductController {
   };
 
   createNewProduct = async (req, res) => {
-    console.log(req.body);
+    console.log("REQ.BODY", req.body);
+    console.log("REQ.FILE", req.file);
+
     const productData = req.body;
     try {
       const response = await this.productModel.createNewProduct(productData);
       res.status(201).json({ status: "success", data: response });
     } catch (error) {
+      console.log("xd");
       console.log("ERROR", error);
     }
   };
+
+  // uploadUserPhoto = upload.single("image");
 }
 
 module.exports = ProductController;

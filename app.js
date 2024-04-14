@@ -26,7 +26,7 @@ app.all("*", (req, res, next) => {
 
 // giving 4 parameters,express recognize this is error handling middleware
 //Global Error handling Middleware
-app.use(globalErrorHandler);
+// app.use(globalErrorHandler);
 
 const start = async () => {
   try {
