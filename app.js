@@ -14,6 +14,7 @@ const port = process.env.PORT;
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
 // routes
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/users", userRoute);

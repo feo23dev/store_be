@@ -13,7 +13,13 @@ class ProductController {
     try {
       const products = await this.productModel.getAllProducts();
 
-      res.status(200).json({ status: "success", data: products });
+      const formattedProducts = products.map((product) => {
+        console.log("PRODUCT", product);
+        const imagePath = "../public/images/products/" + product.image;
+        return { ...product, image: imagePath };
+      });
+
+      res.status(200).json({ status: "success", data: formattedProducts });
     } catch (error) {
       res.status(404).json({
         status: "fail",
@@ -37,6 +43,8 @@ class ProductController {
   };
 
   createNewProduct = async (req, res) => {
+    const fileName = req.file.filename;
+    req.body.image = fileName;
     console.log("REQ.BODY", req.body);
     console.log("REQ.FILE", req.file);
 

@@ -9,11 +9,11 @@ const multer = require("multer");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/img/products");
+    cb(null, "./public/images/products");
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, `product-${req.body.name}-${Date.now()}.${ext}`);
+    cb(null, `product-${req.body.name}.${ext}`);
   },
 });
 
