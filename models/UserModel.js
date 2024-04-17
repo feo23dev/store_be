@@ -24,6 +24,18 @@ class UserModel {
     }
   };
 
+  deleteUserById = async (userId) => {
+    try {
+      const text = "DELETE FROM users WHERE id=$1 ";
+      const values = [userId];
+      const response = await database.pool.query(text, values);
+
+      return { message: "User deleted successfully" };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   getUserByEmail = async (userEmail) => {
     try {
       const text = "SELECT * FROM users WHERE email=$1";

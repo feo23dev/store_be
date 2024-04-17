@@ -1,3 +1,4 @@
+const { json } = require("express");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
 
@@ -15,9 +16,19 @@ class UserController {
     }
   };
 
+  deleteUserById = async (req, res, next) => {
+    const userId = req.params.id;
+
+    try {
+      const resp = await this.UserModel.deleteUserById(userId);
+
+      res.status(200).json({ status: "success", message: "User deleted " });
+    } catch (error) {
+      res.status(500).json({ status: "error", message: "Failed" });
+    }
+  };
+
   getAdminPage = (req, res) => {
-    console.log("From admin page", req.user);
-    console.log("this is request.user", req.user);
     res.json({ status: "success", data: "Admin page" });
   };
 }

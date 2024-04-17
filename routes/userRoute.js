@@ -22,4 +22,11 @@ router.post(
   userController.getAdminPage
 );
 
+router.delete(
+  "/delete/:id",
+  authController.protect,
+  authController.restrictTo,
+  userController.deleteUserById
+);
+
 module.exports = router;
