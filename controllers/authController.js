@@ -19,7 +19,7 @@ class AuthController {
       password: req.body.password,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
-      role_id: req.body.role_id,
+      role_id: 1,
     };
     console.log("USER POST REQUEST DATA", userData);
     if (!userData.email || !userData.password) {
