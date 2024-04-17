@@ -22,7 +22,13 @@ class UserController {
     try {
       const resp = await this.UserModel.deleteUserById(userId);
 
-      res.status(200).json({ status: "success", message: "User deleted " });
+      if (resp.rowCount > 0) {
+        res
+          .status(200)
+          .json({ status: "success", message: "User deleted successfully" });
+      } else {
+        res.status(404).json({ status: "error", message: "User not found" });
+      }
     } catch (error) {
       res.status(500).json({ status: "error", message: "Failed" });
     }

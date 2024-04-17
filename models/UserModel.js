@@ -29,10 +29,11 @@ class UserModel {
       const text = "DELETE FROM users WHERE id=$1 ";
       const values = [userId];
       const response = await database.pool.query(text, values);
-
-      return { message: "User deleted successfully" };
+      console.log("RESPONSE", response);
+      return response;
     } catch (error) {
-      throw new Error(error);
+      console.log("ERRORING");
+      return error;
     }
   };
 
