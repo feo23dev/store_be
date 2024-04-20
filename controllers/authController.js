@@ -57,8 +57,6 @@ class AuthController {
           //   userData.last_name
           // );
 
-          console.log("OUR USER", user);
-
           // SIGN A JWT
           const token = this.signJWT(
             { id: newUser.id },
@@ -69,7 +67,14 @@ class AuthController {
           res.status(201).json({
             status: "success",
             token: token,
-            data: `User created with ${newUser.email}`,
+            data: {
+              id: newUser.id,
+              first_name: newUser.first_name,
+              last_name: newUser.last_name,
+              email: newUser.email,
+              created_at: newUser.created_at,
+              role: newUser.role_id,
+            },
           });
         });
       }

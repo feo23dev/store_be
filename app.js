@@ -19,6 +19,9 @@ app.use(express.static("public"));
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/users", userRoute);
 
+app.get("/", (req, res) => {
+  res.send("Hello from express");
+});
 //uncaught routes
 app.all("*", (req, res, next) => {
   //we send the err obj to next so it skip other middleware stacks and goes to error middleware
