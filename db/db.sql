@@ -121,6 +121,28 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TABLE order_products (
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  quantitiy INT NOT NULL,
+  FOREIGN KEY (order_id) REFERENCES orders(id),
+  FOREIGN KEY (product_id) REFERENCES products(id),
+  PRIMARY KEY (order_id,product_id)
+);
+
+CREATE TABLE orders (
+  id SERIAL PRIMARY KEY,  -- Auto-incrementing integer for the primary key
+  fullname VARCHAR(255) NOT NULL,
+  order_date TIMESTAMP NOT NULL,
+  total_price NUMERIC NOT NULL,
+  address VARCHAR(255),
+  city VARCHAR(255),
+  country VARCHAR(255),
+  email VARCHAR(255) NOT NULL,
+  postal_code VARCHAR(20)
+);
+
+
 
 
 CREATE TRIGGER password_changed_trigger

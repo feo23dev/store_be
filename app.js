@@ -7,8 +7,8 @@ const morgan = require("morgan");
 
 const productRoute = require("./routes/productRoute");
 const userRoute = require("./routes/userRoute");
+const orderRoute = require("./routes/orderRoute");
 const AppError = require("./utils/appError");
-const globalErrorHandler = require("./controllers/errorController");
 
 const port = process.env.PORT;
 app.use(morgan("dev"));
@@ -18,6 +18,8 @@ app.use(express.static("public"));
 // routes
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/users", userRoute);
+
+app.use("/api/v1/orders", orderRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello from express");

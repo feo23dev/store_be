@@ -32,6 +32,7 @@ class ProductController {
     const id = req.params.id;
     try {
       const product = await this.productModel.getProductById(id);
+      console.log("REQUESTED PRODUCT", product);
 
       res.status(200).json({ status: "success", data: product });
     } catch (error) {

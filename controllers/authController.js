@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
-const { user } = require("../db/config");
 
 class AuthController {
   controllers = [];
