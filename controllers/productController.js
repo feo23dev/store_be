@@ -59,6 +59,20 @@ class ProductController {
     }
   };
 
+  deleteProduct = async (req, res) => {
+    const id = req.params.id;
+    console.log("Product to be deleted", id);
+    try {
+      const response = await this.productModel.deleteProduct(id);
+      res.status(204).json({ status: "success", data: response });
+    } catch (error) {
+      res.status(404).json({
+        status: "fail",
+        message: error,
+      });
+    }
+  };
+
   // uploadUserPhoto = upload.single("image");
 }
 

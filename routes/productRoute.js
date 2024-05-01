@@ -41,6 +41,7 @@ router.post(
   upload.single("image"),
   productController.createNewProduct
 );
+router.delete("/:id", authController.protect, productController.deleteProduct);
 
 // Add more routes as needed
 

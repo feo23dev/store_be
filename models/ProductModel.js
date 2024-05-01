@@ -52,6 +52,19 @@ class ProductModel {
       throw new Error(`Error creating new product ${error.message}`);
     }
   };
+
+  deleteProduct = async (id) => {
+    try {
+      const query = {
+        name: "delete-product",
+        text: "DELETE FROM products WHERE id = $1",
+        values: [id],
+      };
+      await database.pool.query(query);
+    } catch (error) {
+      throw new Error(`Error deleting product with ID ${error.message}`);
+    }
+  };
 }
 
 module.exports = ProductModel;
